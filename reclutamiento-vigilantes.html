@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitud de Empleo – Vigilante Privado</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1B3A6B;
+    --blue:    #2563EB;
+    --blue-lt: #DBEAFE;
+    --sky:     #EFF6FF;
+    --slate:   #475569;
+    --muted:   #94A3B8;
+    --line:    #CBD5E1;
+    --white:   #FFFFFF;
+    --success: #16A34A;
+    --bg:      #F1F5F9;
+    --danger:  #DC2626;
+  }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    font-size: 17px;
+    background: var(--bg);
+    color: #1E293B;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--blue);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  header p {
+    margin-top: 6px;
+    font-size: 15px;
+    color: #93C5FD;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: #fff;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--blue-lt);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 999px;
+    transition: width .4s ease;
+  }
+  .progress-label {
+    font-size: 13px;
+    color: var(--slate);
+    white-space: nowrap;
+  }
+
+  /* ── Layout ── */
+  main {
+    max-width: 760px;
+    margin: 32px auto;
+    padding: 0 16px 60px;
+  }
+
+  /* ── Section cards ── */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--sky);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-icon svg { width: 20px; height: 20px; fill: #fff; }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-body {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .section-body.one-col { grid-template-columns: 1fr; }
+  .full { grid-column: 1 / -1; }
+
+  /* ── Form controls ── */
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+  }
+  .required::after {
+    content: ' *';
+    color: var(--danger);
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    height: 50px;
+    padding: 0 14px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    color: #1E293B;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color .15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  textarea {
+    height: 90px;
+    padding: 12px 14px;
+    resize: vertical;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+
+  /* ── Radio / Checkbox group ── */
+  .radio-group, .check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .radio-group label, .check-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #1E293B;
+    padding: 10px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .radio-group input[type="radio"],
+  .check-group input[type="checkbox"] {
+    display: none;
+  }
+  .radio-group label:has(input:checked),
+  .check-group label:has(input:checked) {
+    border-color: var(--blue);
+    background: var(--blue-lt);
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* ── Info note ── */
+  .info-note {
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #92400E;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    grid-column: 1 / -1;
+  }
+  .info-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; fill: #D97706; }
+
+  /* ── Submit ── */
+  .submit-wrap {
+    text-align: center;
+    margin-top: 8px;
+  }
+  .btn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 16px 52px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .btn-submit:hover { background: var(--blue); }
+  .btn-submit:active { transform: scale(.97); }
+  .btn-submit svg { width: 22px; height: 22px; fill: #fff; }
+
+  .form-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  /* ── Confirmation modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,.55);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px 36px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+  }
+  .modal-icon {
+    width: 64px;
+    height: 64px;
+    background: #DCFCE7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .modal-icon svg { width: 32px; height: 32px; fill: var(--success); }
+  .modal-box h2 { font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .modal-box p { font-size: 15px; color: var(--slate); line-height: 1.6; }
+  .btn-ok {
+    margin-top: 24px;
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 12px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-ok:hover { background: var(--blue); }
+
+  @media (max-width: 560px) {
+    .section-body { grid-template-columns: 1fr; }
+    .btn-submit { font-size: 18px; padding: 14px 32px; }
+    header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Recursos Humanos</div>
+  <h1>Solicitud de Empleo<br>Vigilante Privado</h1>
+  <p>Llene todos los campos marcados con <strong>*</strong> — Son obligatorios</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <span class="progress-label" id="progressLabel">0% completado</span>
+</div>
+
+<main>
+<form id="mainForm" novalidate>
+
+  <!-- 1. Datos Personales -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <h2>1. Datos Personales</h2>
+    </div>
+    <div class="section-body">
+
+      <div>
+        <label class="required">Nombres</label>
+        <input type="text" name="nombres" placeholder="Ej: Juan Carlos" required>
+      </div>
+      <div>
+        <label class="required">Apellidos</label>
+        <input type="text" name="apellidos" placeholder="Ej: Pérez García" required>
+      </div>
+      <div>
+        <label class="required">Cédula de Identidad</label>
+        <input type="text" name="cedula" placeholder="Ej: V-12345678" required>
+      </div>
+      <div>
+        <label class="required">Fecha de Nacimiento</label>
+        <input type="date" name="fecha_nac" required>
+      </div>
+      <div>
+        <label class="required">Teléfono / Celular</label>
+        <input type="tel" name="telefono" placeholder="Ej: 0424-1234567" required>
+      </div>
+      <div>
+        <label>Correo Electrónico</label>
+        <input type="email" name="correo" placeholder="Ej: juan@correo.com">
+      </div>
+      <div class="full">
+        <label class="required">Dirección de Residencia</label>
+        <textarea name="direccion" placeholder="Calle, número, sector, municipio, estado..." required></textarea>
+      </div>
+
+      <div class="full">
+        <label class="required">Estado Civil</label>
+        <div class="radio-group">
+          <label><input type="radio" name="estado_civil" value="soltero"> Soltero/a</label>
+          <label><input type="radio" name="estado_civil" value="casado"> Casado/a</label>
+          <label><input type="radio" name="estado_civil" value="unido"> Unión Libre</label>
+          <label><input type="radio" name="estado_civil" value="divorciado"> Divorciado/a</label>
+          <label><input type="radio" name="estado_civil" value="viudo"> Viudo/a</label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. Datos Físicos -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2zm7 18v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1c0-3.3 4.7-5 7-5s7 1.7 7 5z"/><path d="M17 8h1v8h-1zm0 0h1v1l-3 3v-1l2-2z" opacity=".4"/></svg>
+      </div>
+      <h2>2. Condición Física</h2>
+    </div>
+    <div class="section-body">
+
+      <div>
+        <label class="required">Estatura (metros)</label>
+        <input type="number" name="estatura" placeholder="Ej: 1.75" step="0.01" min="1.50" max="2.20" required>
+      </div>
+      <div>
+        <label class="required">Peso (kilogramos)</label>
+        <input type="number" name="peso" placeholder="Ej: 80" step="1" min="50" max="200" required>
+      </div>
+
+      <div class="full">
+        <label class="required">¿Tiene alguna condición médica o limitación física?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="condicion_medica" value="no" required> No</label>
+          <label><input type="radio" name="condicion_medica" value="si"> Sí</label>
+        </div>
+      </div>
+
+      <div class="full">
+        <label>Si respondió Sí, descríbala brevemente</label>
+        <input type="text" name="condicion_descripcion" placeholder="Ej: Hipertensión controlada">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. Educación -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+      </div>
+      <h2>3. Educación</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="full">
+        <label class="required">Nivel de Educación</label>
+        <select name="educacion" required>
+          <option value="">-- Seleccione --</option>
+          <option>Sin estudios</option>
+          <option>Primaria incompleta</option>
+          <option>Primaria completa</option>
+          <option>Bachillerato incompleto</option>
+          <option>Bachillerato completo</option>
+          <option>Técnico / TSU</option>
+          <option>Universitario</option>
+        </select>
+      </div>
+
+      <div>
+        <label>¿Sabe leer y escribir?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="leer_escribir" value="si"> Sí</label>
+          <label><input type="radio" name="leer_escribir" value="no"> No</label>
+        </div>
+      </div>
+
+      <div>
+        <label>¿Tiene licencia de conducir?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="licencia" value="si"> Sí</label>
+          <label><input type="radio" name="licencia" value="no"> No</label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. Experiencia -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.33C18 2.1 15.9 0 13.33 0c-1.43 0-2.67.6-3.57 1.5L8 3.24 6.24 1.5C5.34.6 4.1 0 2.67 0 1.1 0 0 1.1 0 2.67c0 .45.11.89.18 1.33H0v14C0 19.1 2.9 22 6 22h12c3.1 0 6-2.9 6-4V8c0-1.1-.9-2-2-2z"/></svg>
+      </div>
+      <h2>4. Experiencia Laboral</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="full">
+        <label class="required">¿Ha trabajado como vigilante o guardia antes?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="experiencia_previa" value="si" required> Sí</label>
+          <label><input type="radio" name="experiencia_previa" value="no"> No</label>
+        </div>
+      </div>
+
+      <div class="full">
+        <label class="required">¿Está trabajando actualmente?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="trabaja_actualmente" value="si" required> Sí, estoy trabajando</label>
+          <label><input type="radio" name="trabaja_actualmente" value="no"> No, estoy desempleado/a</label>
+        </div>
+      </div>
+
+      <div>
+        <label>Años de experiencia en seguridad</label>
+        <select name="anios_exp">
+          <option value="">-- Seleccione --</option>
+          <option>Menos de 1 año</option>
+          <option>1 – 2 años</option>
+          <option>3 – 5 años</option>
+          <option>Más de 5 años</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Último lugar donde trabajó</label>
+        <input type="text" name="ultimo_trabajo" placeholder="Nombre de la empresa">
+      </div>
+
+      <div class="full">
+        <label>¿En qué tipos de lugar ha trabajado? (Puede marcar varios)</label>
+        <div class="check-group">
+          <label><input type="checkbox" name="tipo_lugar" value="residencial"> Residencias</label>
+          <label><input type="checkbox" name="tipo_lugar" value="comercio"> Comercios</label>
+          <label><input type="checkbox" name="tipo_lugar" value="industria"> Industrias</label>
+          <label><input type="checkbox" name="tipo_lugar" value="evento"> Eventos</label>
+          <label><input type="checkbox" name="tipo_lugar" value="banco"> Bancos / Valores</label>
+          <label><input type="checkbox" name="tipo_lugar" value="otro"> Otro</label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 5. Formación en Seguridad -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+      </div>
+      <h2>5. Formación en Seguridad</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="full">
+        <label>¿Tiene curso de vigilante privado (DAEX / SEBIN)?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="curso_vigilante" value="si"> Sí, tengo certificado</label>
+          <label><input type="radio" name="curso_vigilante" value="vencido"> Sí, pero está vencido</label>
+          <label><input type="radio" name="curso_vigilante" value="no"> No</label>
+        </div>
+      </div>
+
+      <div class="full">
+        <label>¿Tiene manejo de armas de fuego?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="armas" value="si"> Sí, tengo porte</label>
+          <label><input type="radio" name="armas" value="sin_porte"> Sí, pero sin porte</label>
+          <label><input type="radio" name="armas" value="no"> No</label>
+        </div>
+      </div>
+
+      <div class="full">
+        <label>Otros cursos o certificaciones (opcional)</label>
+        <textarea name="otros_cursos" placeholder="Ej: Primeros auxilios, defensa personal, contra incendios..."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 6. Disponibilidad -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+      </div>
+      <h2>6. Disponibilidad</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="full">
+        <label class="required">¿Cuándo puede empezar a trabajar?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="disponibilidad" value="inmediata" required> De inmediato</label>
+          <label><input type="radio" name="disponibilidad" value="1semana"> En 1 semana</label>
+          <label><input type="radio" name="disponibilidad" value="2semanas"> En 2 semanas</label>
+          <label><input type="radio" name="disponibilidad" value="1mes"> En 1 mes</label>
+        </div>
+      </div>
+
+      <div class="full">
+        <label class="required">¿Qué turno prefiere trabajar?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="turno" value="dia" required> Diurno (7am – 7pm)</label>
+          <label><input type="radio" name="turno" value="noche"> Nocturno (7pm – 7am)</label>
+          <label><input type="radio" name="turno" value="cualquiera"> Cualquiera</label>
+        </div>
+      </div>
+
+      <div class="full info-note">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <span>Los turnos son de <strong>12 horas</strong>. Se trabajan guardias rotativas incluyendo fines de semana y feriados.</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 8. ¿Cómo se enteró? -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z" opacity=".0"/><path d="M13 9l4 3-4 3V9zM3 5h2v14H3z" opacity=".0"/><path d="M18 16l-6-4 6-4v8zM4 6h2v12H4V6zm3 0h10v2H7V6zm0 10h10v2H7v-2z" opacity=".0"/><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/><path d="M12 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 9c-2.7 0-5.8 1.29-6 2h12c-.2-.72-3.3-2-6-2z" opacity=".0"/></svg>
+      </div>
+      <h2>8. ¿Cómo se enteró de nosotros?</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="full">
+        <label class="required">¿Por qué medio conoció esta oferta de trabajo?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="como_entero" value="recomendacion" required> Me lo recomendó un conocido</label>
+          <label><input type="radio" name="como_entero" value="empleado"> Me lo dijo un empleado de la empresa</label>
+          <label><input type="radio" name="como_entero" value="redes"> Redes sociales (Instagram, Facebook, etc.)</label>
+          <label><input type="radio" name="como_entero" value="volante"> Volante o cartel</label>
+          <label><input type="radio" name="como_entero" value="internet"> Internet / Página web</label>
+          <label><input type="radio" name="como_entero" value="periodico"> Periódico o clasificados</label>
+          <label><input type="radio" name="como_entero" value="otro"> Otro medio</label>
+        </div>
+      </div>
+
+      <div class="full">
+        <label>Si fue por recomendación, ¿quién lo recomendó?</label>
+        <input type="text" name="quien_recomendo" placeholder="Nombre de la persona">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 9. Referencias -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      </div>
+      <h2>9. Referencias Personales</h2>
+    </div>
+    <div class="section-body">
+
+      <div>
+        <label class="required">Nombre de referencia 1</label>
+        <input type="text" name="ref1_nombre" placeholder="Nombre completo" required>
+      </div>
+      <div>
+        <label class="required">Teléfono de referencia 1</label>
+        <input type="tel" name="ref1_tel" placeholder="0412-0000000" required>
+      </div>
+
+      <div>
+        <label>Nombre de referencia 2</label>
+        <input type="text" name="ref2_nombre" placeholder="Nombre completo">
+      </div>
+      <div>
+        <label>Teléfono de referencia 2</label>
+        <input type="tel" name="ref2_tel" placeholder="0412-0000000">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-wrap">
+    <button type="submit" class="btn-submit">
+      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      Enviar Solicitud
+    </button>
+    <p class="form-note">Al enviar esta solicitud usted autoriza el uso de sus datos para fines de reclutamiento.</p>
+  </div>
+
+</form>
+</main>
+
+<!-- Confirmation modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    </div>
+    <h2>¡Solicitud Enviada!</h2>
+    <p>Sus datos fueron registrados correctamente. Le contactaremos en los próximos <strong>3 a 5 días hábiles</strong> para informarle sobre el proceso.</p>
+    <button class="btn-ok" onclick="document.getElementById('modalOverlay').classList.remove('show')">Aceptar</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('mainForm');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function calcProgress() {
+    const required = form.querySelectorAll('[required]');
+    let filled = 0;
+    required.forEach(el => {
+      if (el.type === 'radio') {
+        const group = form.querySelectorAll(`[name="${el.name}"]`);
+        if ([...group].some(r => r.checked)) filled++;
+      } else if (el.value.trim() !== '') {
+        filled++;
+      }
+    });
+    const unique = [...new Set([...required].map(e => e.name))].length;
+    const pct = unique ? Math.round((filled / unique) * 100) : 0;
+    fill.style.width = pct + '%';
+    label.textContent = pct + '% completado';
+  }
+
+  form.addEventListener('input', calcProgress);
+  form.addEventListener('change', calcProgress);
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const missing = [];
+    const required = form.querySelectorAll('[required]');
+    required.forEach(el => {
+      if (el.type === 'radio') {
+        const name = el.name;
+        if (!missing.includes(name) && ![...form.querySelectorAll(`[name="${name}"]`)].some(r => r.checked)) {
+          missing.push(name);
+        }
+      } else if (!el.value.trim()) {
+        el.style.borderColor = 'var(--danger)';
+        el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+      }
+    });
+    if (missing.length === 0 && !form.querySelector('input[required]:not(:placeholder-shown)[style*="danger"]')) {
+      document.getElementById('modalOverlay').classList.add('show');
+    } else {
+      const first = form.querySelector('input[required][value=""], select[required] option[value=""]:checked');
+      if (first && first.parentElement) first.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+</script>
+</body>
+</html>
