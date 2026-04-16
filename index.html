@@ -695,7 +695,12 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  const SUPABASE_URL = 'https://edsncuxoypzzmgzlqsxf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_gZ9M1GoKNFVGneN7rIG0_A_0c63U446';
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
   const form = document.getElementById('mainForm');
   const fill = document.getElementById('progressFill');
   const label = document.getElementById('progressLabel');
@@ -720,26 +725,87 @@
   form.addEventListener('input', calcProgress);
   form.addEventListener('change', calcProgress);
 
-  form.addEventListener('submit', e => {
+  function getRadio(name) {
+    const checked = form.querySelector(`input[name="${name}"]:checked`);
+    return checked ? checked.value : null;
+  }
+  function getCheckboxes(name) {
+    return [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value).join(', ');
+  }
+  function getVal(name) {
+    const el = form.querySelector(`[name="${name}"]`);
+    return el ? el.value.trim() || null : null;
+  }
+
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const missing = [];
+
     const required = form.querySelectorAll('[required]');
+    let hasError = false;
     required.forEach(el => {
       if (el.type === 'radio') {
-        const name = el.name;
-        if (!missing.includes(name) && ![...form.querySelectorAll(`[name="${name}"]`)].some(r => r.checked)) {
-          missing.push(name);
-        }
+        const group = [...form.querySelectorAll(`input[name="${el.name}"]`)];
+        if (!group.some(r => r.checked)) hasError = true;
       } else if (!el.value.trim()) {
         el.style.borderColor = 'var(--danger)';
         el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+        hasError = true;
       }
     });
-    if (missing.length === 0 && !form.querySelector('input[required]:not(:placeholder-shown)[style*="danger"]')) {
-      document.getElementById('modalOverlay').classList.add('show');
+    if (hasError) return;
+
+    const btn = form.querySelector('.btn-submit');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    const payload = {
+      nombres:               getVal('nombres'),
+      apellidos:             getVal('apellidos'),
+      cedula:                getVal('cedula'),
+      fecha_nac:             getVal('fecha_nac') || null,
+      telefono:              getVal('telefono'),
+      correo:                getVal('correo'),
+      direccion:             getVal('direccion'),
+      estado_civil:          getRadio('estado_civil'),
+      estatura:              parseFloat(getVal('estatura')) || null,
+      peso:                  parseFloat(getVal('peso')) || null,
+      condicion_medica:      getRadio('condicion_medica'),
+      condicion_descripcion: getVal('condicion_descripcion'),
+      educacion:             getVal('educacion'),
+      leer_escribir:         getRadio('leer_escribir'),
+      licencia:              getRadio('licencia'),
+      experiencia_previa:    getRadio('experiencia_previa'),
+      trabaja_actualmente:   getRadio('trabaja_actualmente'),
+      anios_exp:             getVal('anios_exp'),
+      ultimo_trabajo:        getVal('ultimo_trabajo'),
+      tipo_lugar:            getCheckboxes('tipo_lugar'),
+      curso_vigilante:       getRadio('curso_vigilante'),
+      armas:                 getRadio('armas'),
+      otros_cursos:          getVal('otros_cursos'),
+      disponibilidad:        getRadio('disponibilidad'),
+      turno:                 getRadio('turno'),
+      como_entero:           getRadio('como_entero'),
+      quien_recomendo:       getVal('quien_recomendo'),
+      ref1_nombre:           getVal('ref1_nombre'),
+      ref1_tel:              getVal('ref1_tel'),
+      ref2_nombre:           getVal('ref2_nombre'),
+      ref2_tel:              getVal('ref2_tel'),
+    };
+
+    const { error } = await sbClient.from('solicitudes').insert([payload]);
+
+    if (error) {
+      alert('Hubo un error al enviar. Por favor intente de nuevo.');
+      console.error(error);
+      btn.textContent = 'Enviar Solicitud';
+      btn.disabled = false;
     } else {
-      const first = form.querySelector('input[required][value=""], select[required] option[value=""]:checked');
-      if (first && first.parentElement) first.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('modalOverlay').classList.add('show');
+      form.reset();
+      fill.style.width = '0%';
+      label.textContent = '0% completado';
+      btn.textContent = 'Enviar Solicitud';
+      btn.disabled = false;
     }
   });
 </script>
